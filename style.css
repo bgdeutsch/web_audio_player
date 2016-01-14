@@ -1,0 +1,30 @@
+#audio_container{	
+	width: 700px;
+    height: 300px;
+    border: 1px solid green;
+    margin-top: 75px;
+    position: relative;
+}
+
+#audio_controls{
+	position: absolute;
+    bottom: 0;
+    font-size: 30px;
+}
+
+i{
+	cursor: pointer;
+	border: none;
+}
+
+
+
+
+#my_playlist{ float:right;}
+#analyser{
+	width: 600px;
+    height: 100px;
+    border: 1px solid purple;
+    margin-top: 50px;
+}
+

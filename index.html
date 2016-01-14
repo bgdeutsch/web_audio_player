@@ -1,0 +1,46 @@
+<!doctype html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AudioApp</title>
+  <link rel='stylesheet' type='text/css' href='./style.css' />
+  <link rel='stylesheet' href='http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css' />
+</head>
+
+<body>
+
+	<canvas id='analyser'></canvas>
+	<div id='audio_container'>
+		<div id='audio_controls'>
+			<i class='ion-arrow-left-a'></i>
+			<i class='ion-play'></i>
+			<i class='ion-stop'></i>
+			<i class='ion-pause'></i>
+			<i class='ion-arrow-right-a'></i>
+		</div>
+		<p>Seek Slider</p>
+		<input id="seekslider" type="range" min="0" max="100" value="0" />	
+		<p>Volume Slider</p>
+		<input id="volumeslider" type="range" min="0" max="100" value="100">
+
+		<div id='timebox'>
+			<span id='current_time_text'>0:00</span> / <span id='duration_time_text'>0:00</span>
+		</div>
+
+		<h3 id='show_playlist'></h3>
+		
+
+		<select id='my_playlist' size='4'>
+			<option value='Solo.mp3'>The Story So Far - Solo</option>
+			<option value='Doubt.mp3'>Giants at Large - Doubt</option>
+			<option value='TruthHitsEverybody.mp3'>The Police - Truth Hits Everybody</option>
+			<option value='Decrescendo.mp3'>Rx Bandits - Decrescendo (Live)</option>
+		</select>
+	</div>
+
+
+	
+
+	<script src='https://code.jquery.com/jquery-2.2.0.min.js'></script>
+	<script src='./app.js'></script>
+</body>
+</html>
