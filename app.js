@@ -177,8 +177,8 @@ function initAudio(){
 
 		//Add 0 to any single digits in the time of song
 		// for aesthetic purposes; i.e. 1:05 is standard (vs 1:5). 
-		if(current_seconds < 10)  { current_seconds = '0' + current_seconds; }
-		if(current_minutes < 10)  { current_minutes = '0' + current_minutes; }
+		if(current_seconds < 10)  { current_seconds  = '0' + current_seconds; }
+		if(current_minutes < 10)  { current_minutes  = '0' + current_minutes; }
 		if(duration_seconds < 10) { duration_seconds = '0' + duration_seconds; }
 		if(duration_minutes < 10) { duration_minutes = '0' + duration_minutes; }
 
@@ -187,6 +187,44 @@ function initAudio(){
 		current_time_text.innerHTML = current_minutes+':'+current_seconds;
 		duration_time_text.innerHTML = duration_minutes+':'+duration_seconds;
 	}
+
+	/**
+		**Analyser Functionality**
+	**/
+
+	//Establish variables for use in the analyser.
+	var canvas, ctx, source, context, analyser, fbc_array, 
+		bars, bar_x, bar_width, bar_height;
+
+	context  = new webkitAudioContext();
+	analyser = context.createAnalyser();
+	canvas   = document.getElementById('analyser');
+	ctx      = canvas.getContext('2d');
+
+	source   = context.createMediaElementSource(audio);
+	source.connect(analyser);
+	analyser.connect(context.destination);
+	frameLooper();
+
+	//frameLooper function animates the canvas graphics, looping
+	//at a very fast speed.
+
+	function frameLooper(){
+		window.webkitRequestAnimationFrame(frameLooper);
+		fbc_array = new Uint8Array(analyser.frequencyBinCount);
+		analyser.getByteFrequencyData(fbc_array);
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		ctx.fillStyle = '#FFABF0';
+		bars = 100;
+
+		for (var i=0; i<bars; i++){
+			bar_x = i*3;
+			bar_width = 2;
+			bar_height = -(fbc_array[i] / 2);
+			ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
+		}
+	}
+
 } //Closes initAudio function
 		
 //Run initAudio function only after all page elements are loaded.
