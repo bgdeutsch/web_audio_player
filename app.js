@@ -30,7 +30,7 @@ function initAudio(){
 	show_playlist.innerHTML = "Track "+(playlist_index+1)+" - "+ playlist[playlist_index];
 
 	//Hide play button, as the first track plays automatically on page load.
-	$(play_button).hide();	
+	$('#play').hide();	
 
 	//Event Handlers
 	$(play_button).click(play_audio);
@@ -56,6 +56,7 @@ function initAudio(){
 	//When user clicks a song title in the playlist,
 	//call change_playlist_track function.
 	my_playlist.addEventListener('change', change_playlist_track);
+	
 
 	//The following three event handlers/functions are described
 	//in more detail below, beginning on line 68.
@@ -121,22 +122,23 @@ function initAudio(){
 	//and show the stop button.
 	function play_audio(){
 		audio.play();
-		$(play_button).hide();
-		$(stop_button).show();
+		$('#play').hide();
+		$('#stop').show();
 	}
 	
 	//Pause audio. When audio is paused, show the play button so the user can
 	//play the song when ready.
 	function pause_audio(){
 		audio.pause();
-		$(play_button).show();
+		$('#stop').hide();
+		$('#play').show();
 	}
 
 	//Stop audio, show play button.
 	function stop_audio(){
 		audio.pause();
-		$(play_button).show();
-		$(stop_button).hide();
+		$('#stop').hide();
+		$('#play').show();
 		audio.currentTime = 0;
 	}
 
@@ -213,13 +215,16 @@ function initAudio(){
 		window.webkitRequestAnimationFrame(frameLooper);
 		fbc_array = new Uint8Array(analyser.frequencyBinCount);
 		analyser.getByteFrequencyData(fbc_array);
+		var gradient = ctx.createLinearGradient(0,0,200,100);
+		gradient.addColorStop(0,"#68EFBB");
+		gradient.addColorStop(1,"#EF689C");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		ctx.fillStyle = '#FFABF0';
+		ctx.fillStyle = gradient;
 		bars = 100;
 
 		for (var i=0; i<bars; i++){
 			bar_x = i*3;
-			bar_width = 2;
+			bar_width = 1;
 			bar_height = -(fbc_array[i] / 2);
 			ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
 		}

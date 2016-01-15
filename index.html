@@ -10,24 +10,14 @@
 
 	<canvas id='analyser'></canvas>
 	<div id='audio_container'>
-		<div id='audio_controls'>
-			<i class='ion-arrow-left-a'></i>
-			<i class='ion-play'></i>
-			<i class='ion-stop'></i>
-			<i class='ion-pause'></i>
-			<i class='ion-arrow-right-a'></i>
+		<div id='track_info_box'>
+			<h3 id='show_playlist'></h3>
+			<div id='timebox'>
+				<span id='current_time_text'>0:00</span>
+				<input id="seekslider" type="range" min="0" max="100" value="0" />  
+				<span id='duration_time_text'>0:00</span>
+			</div>
 		</div>
-		<p>Seek Slider</p>
-		<input id="seekslider" type="range" min="0" max="100" value="0" />	
-		<p>Volume Slider</p>
-		<input id="volumeslider" type="range" min="0" max="100" value="100">
-
-		<div id='timebox'>
-			<span id='current_time_text'>0:00</span> / <span id='duration_time_text'>0:00</span>
-		</div>
-
-		<h3 id='show_playlist'></h3>
-		
 
 		<select id='my_playlist' size='4'>
 			<option value='Solo.mp3'>The Story So Far - Solo</option>
@@ -35,12 +25,37 @@
 			<option value='TruthHitsEverybody.mp3'>The Police - Truth Hits Everybody</option>
 			<option value='Decrescendo.mp3'>Rx Bandits - Decrescendo (Live)</option>
 		</select>
-	</div>
 
-
-	
+		<div id='audio_controls'>
+			<div class='buttons'>
+				<div class='audio_button'><i class='ion-arrow-left-a'></i></div>
+				<div class='audio_button' id='stop'><i class='ion-stop'></i></div>
+				<div class='audio_button' id='play'><i class='ion-play'></i></div>
+				<div class='audio_button'><i class='ion-pause'></i></div>
+				<div class='audio_button'><i class='ion-arrow-right-a'></i></div>
+				<div id='volume'>
+					<i class='ion-volume-medium' style='font-size:30px;'></i>&nbsp;
+					<input id="volumeslider" type="range" min="0" max="100" value="100">
+				</div>
+			</div>
+		</div>
+			
 
 	<script src='https://code.jquery.com/jquery-2.2.0.min.js'></script>
 	<script src='./app.js'></script>
 </body>
 </html>
+			
+					
+
+
+			
+
+
+		
+
+
+
+	
+
+					
