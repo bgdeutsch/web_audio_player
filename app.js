@@ -5,32 +5,35 @@ function initAudio(){
 		current_time_text, duration_time_text, dir, playlist, playlist_index,
 		show_playlist, my_playlist;
 
-	
 	var play_button    = $('.ion-play'); 
 	var pause_button   = $('.ion-pause');
 	var stop_button    = $('.ion-stop');
 	var volumeslider   = $('#volumeslider');
 	var next_button	   = $('.ion-arrow-right-a');
 	var prev_button    = $('.ion-arrow-left-a');
+	var mute_button	   = $('.ion-volume-mute');
+	var med_volume     = $('.ion-volume-medium');
+	var playlist_track = $('#my_playlist li');
 	dir 		   	   = 'media/';
-	playlist           = ['Solo.mp3','Doubt.mp3','TruthHitsEverybody.mp3', 'Decrescendo.mp3'];
+	playlist           = ['SoMuch.mp3','Solo.mp3','Doubt.mp3','CanI.mp3', 'Decrescendo.mp3','Haircuts.mp3'];
 	playlist_index     = 0;
 	seekslider   	   = document.getElementById('seekslider');
 	current_time_text  = document.getElementById('current_time_text');
 	duration_time_text = document.getElementById('duration_time_text');
 	show_playlist  	   = document.getElementById('show_playlist');
 	my_playlist		   = document.getElementById('my_playlist');
-
-
+	
 	//Audio object istantiation and options.
 	audio = new Audio();
 	audio.src = dir+playlist[0];
 	audio.loop = false;
 	audio.play();
-	show_playlist.innerHTML = "Track "+(playlist_index+1)+" - "+ playlist[playlist_index];
+	show_playlist.innerHTML = (playlist_index+1)+". "+ playlist[playlist_index];
 
 	//Hide play button, as the first track plays automatically on page load.
+	//Hide mute butotn, as the first track will not be muted, it will be loud!
 	$('#play').hide();	
+	$(mute_button).hide();
 
 	//Event Handlers
 	$(play_button).click(play_audio);
@@ -38,6 +41,11 @@ function initAudio(){
 	$(stop_button).click(stop_audio);
 	$(next_button).click(next_song);
 	$(prev_button).click(previous_song);
+	$(med_volume).click(mute_audio);
+	$(mute_button).click(mute_audio);
+	$(playlist_track).click(user_change_song);
+	
+
 
 	//I have experienced some time consuming quirkiness when
 	//mixing jQuery with the web audio API.  Switching to native javaScript;
@@ -53,11 +61,8 @@ function initAudio(){
 		next_song();
 	});
 
-	//When user clicks a song title in the playlist,
-	//call change_playlist_track function.
-	my_playlist.addEventListener('change', change_playlist_track);
-	
 
+	
 	//The following three event handlers/functions are described
 	//in more detail below, beginning on line 68.
 	$(seekslider).mousedown(function(e){
@@ -79,11 +84,15 @@ function initAudio(){
 		*Functions!
 	**/
 
-	//Change song in my playlist according to user interface.
-	function change_playlist_track(e){
-		audio.src=dir+e.target.value;
+	// Change song in my playlist according to user interface.
+		function user_change_song(){
+		var track = $(this).attr('song');
+		show_playlist.innerHTML = $(this).text();
+		$(this).addClass('active');
+		audio.src=dir+track;
 		audio.play();
-	}
+	};
+	
 
 	//Change to next song automatically in playlist when previous song has ended.
 	function next_song(){
@@ -99,7 +108,7 @@ function initAudio(){
 		}
 
 		//Update the current song, and play it after switching songs.
-		show_playlist.innerHTML = 'Track '+(playlist_index+1)+' - '+playlist[playlist_index];
+		show_playlist.innerHTML = (playlist_index+1)+'. '+playlist[playlist_index];
 		audio.src = dir+playlist[playlist_index];
 		audio.play();
 	}
@@ -113,7 +122,7 @@ function initAudio(){
 		}
 
 		//Update the current song, and play it after switching songs.
-		show_playlist.innerHTML = 'Track '+(playlist_index+1)+' - '+playlist[playlist_index];
+		show_playlist.innerHTML = (playlist_index+1)+'. '+playlist[playlist_index];
 		audio.src = dir+playlist[playlist_index];
 		audio.play();
 	}
@@ -140,6 +149,19 @@ function initAudio(){
 		$('#stop').hide();
 		$('#play').show();
 		audio.currentTime = 0;
+	}
+
+	//Mute Audio function
+	function mute_audio(){
+		if(audio.muted){
+			audio.muted = false;
+			$(med_volume).show();
+			$(mute_button).hide();
+		}else{
+			audio.muted = true;
+			$(mute_button).show();
+			$(med_volume).hide();
+		}
 	}
 
 	//Volume fuctionality.  The volume property returns a value between
@@ -191,7 +213,7 @@ function initAudio(){
 	}
 
 	/**
-		**Analyser Functionality**
+		**Analyzer Functionality**
 	**/
 
 	//Establish variables for use in the analyser.
@@ -212,19 +234,22 @@ function initAudio(){
 	//at a very fast speed.
 
 	function frameLooper(){
+		//Establish new Request Animation Frame Object, passing in frameLooper function.
 		window.webkitRequestAnimationFrame(frameLooper);
+		//
 		fbc_array = new Uint8Array(analyser.frequencyBinCount);
 		analyser.getByteFrequencyData(fbc_array);
+		//Create canvas rectangles with specific height/width/color gradient
 		var gradient = ctx.createLinearGradient(0,0,200,100);
 		gradient.addColorStop(0,"#68EFBB");
 		gradient.addColorStop(1,"#EF689C");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.fillStyle = gradient;
-		bars = 100;
+		bars = 70;
 
 		for (var i=0; i<bars; i++){
-			bar_x = i*3;
-			bar_width = 1;
+			bar_x = i*5;
+			bar_width = 2;
 			bar_height = -(fbc_array[i] / 2);
 			ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
 		}
@@ -234,4 +259,3 @@ function initAudio(){
 		
 //Run initAudio function only after all page elements are loaded.
 window.addEventListener('load', initAudio, false);
-

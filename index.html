@@ -14,17 +14,19 @@
 			<h3 id='show_playlist'></h3>
 			<div id='timebox'>
 				<span id='current_time_text'>0:00</span>
-				<input id="seekslider" type="range" min="0" max="100" value="0" />  
+				<input id="seekslider" type="range" min="0" max="100" value="0" step="1" />  
 				<span id='duration_time_text'>0:00</span>
 			</div>
 		</div>
 
-		<select id='my_playlist' size='4'>
-			<option value='Solo.mp3'>The Story So Far - Solo</option>
-			<option value='Doubt.mp3'>Giants at Large - Doubt</option>
-			<option value='TruthHitsEverybody.mp3'>The Police - Truth Hits Everybody</option>
-			<option value='Decrescendo.mp3'>Rx Bandits - Decrescendo (Live)</option>
-		</select>
+		<ul id='my_playlist'>
+			<li song='SoMuch.mp3' class='active'><div class='track'>Everclear - So Much For The Afterglow</div></li>
+			<li song='Solo.mp3'><div class='track'>The Story So Far - Solo</div></li>
+			<li song='Doubt.mp3'><div class='track'>Giants at Large - Doubt</div></li>
+			<li song='CanI.mp3'><div class='track'>A Tribe Called Quest - Can I Kick It?</div></li>
+			<li song='Decrescendo.mp3'><div class='track'>Rx Bandits - Decrescendo (Live)</div></li>
+			<li song='Haircuts.mp3'><div class='track'>Lifetime - Haircuts and T-shirts</div></li>
+		</ul>
 
 		<div id='audio_controls'>
 			<div class='buttons'>
@@ -34,6 +36,7 @@
 				<div class='audio_button'><i class='ion-pause'></i></div>
 				<div class='audio_button'><i class='ion-arrow-right-a'></i></div>
 				<div id='volume'>
+					<i class='ion-volume-mute' style='font-size:30px';></i>
 					<i class='ion-volume-medium' style='font-size:30px;'></i>&nbsp;
 					<input id="volumeslider" type="range" min="0" max="100" value="100">
 				</div>
@@ -44,18 +47,4 @@
 	<script src='https://code.jquery.com/jquery-2.2.0.min.js'></script>
 	<script src='./app.js'></script>
 </body>
-</html>
-			
-					
-
-
-			
-
-
-		
-
-
-
-	
-
-					
+</html>					
