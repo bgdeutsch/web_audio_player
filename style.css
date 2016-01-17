@@ -1,0 +1,177 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700);
+
+*{
+	border-radius:5px;
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+body{
+	margin:0;
+	padding:0;
+	height:100%;
+	background: #f1f1f1;
+}
+
+ul{
+	list-style-type: none;
+}
+
+#audio_container{	
+	width: 100%;
+    height: 300px;
+    border: 1px solid green;
+    margin: 0 auto;
+    margin-top: 95px;
+    position: fixed;
+    bottom: 0;
+    background: -webkit-linear-gradient(top, #439C79 0%,#68EFBB 10%,#4FB88F 100%,#68EFBB 100%);
+}
+
+#audio_controls{
+	position: absolute;
+    bottom: 0;
+    border-top: 1px solid black;
+    width: 100%;
+    height: 100px;
+    color: #68EFBB;
+    background: #333333;
+}
+
+#track_info_box{
+	border: 3px solid rgba(241, 241, 241, 0.85);
+    width: 35%;
+    height: 127px;
+    padding: 10px;
+    margin-top: 2%;
+    margin-left: 6%;
+    color: #f1f1f1;
+    background: #333333;
+}
+
+.audio_button{
+	border: 2px solid;
+    width: 7%;
+    height: 51px;
+    text-align: center;
+    border-radius: 15%;
+    float: left;
+    line-height: 2.5;
+    margin-left: 15px;
+}
+
+.audio_button:hover{
+	background: #68EFBB;
+	color:#f1f1f1;
+	border-color:#68EFBB;
+}
+
+.buttons{
+	margin-top:25px;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 65%;
+}
+
+#volumeslider{
+	margin-top: 15px;
+    margin-right: 60px;
+}
+
+i{
+	cursor: pointer;
+	border: none;
+	font-size:21px;
+}
+
+#volume{
+	float:right;
+	margin-top:5px;
+}
+
+#volume i{
+	font-size: 30px;
+    float: left;
+}
+
+#my_playlist{
+ 	float: right;
+    margin-top: -156px;
+    margin-right: 76px;
+    width: 250px;
+    height: 153px;
+    font-size: 15px;
+    border: 3px solid rgba(241, 241, 241, 0.85);
+    background: rgba(241, 241, 241, 1);
+    border-radius: 5px;
+ }
+
+.track{
+	position: relative;
+	line-height: 1.3;
+}
+
+ #my_playlist li{
+ 	cursor: pointer;
+ 	text-align: left;
+ }
+
+#analyser{
+	width: 100%;
+    height: 175px;
+    margin-top: 174px;
+}
+
+.active{font-weight: 700;}
+    
+
+/*Styling input range sliders*/
+input[type=range]{
+    -webkit-appearance: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 300px;
+    height: 5px;
+    background: white;
+    border: none;
+    border-radius: 3px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+    background: #68EFBB;
+    margin-top: -4px;
+}
+
+#timebox input[type=range]::-webkit-slider-runnable-track{
+	height: 8px;
+	width: 200px;
+}
+
+#timebox input[type=range]::-webkit-slider-thumb{
+	height: 18px;
+	width:  18px;
+}
+	
+
+input[type=range]:focus {
+    outline: none;
+}
+
+input[type=range]:focus::-webkit-slider-runnable-track {
+    background: #f1f1f1;
+}
+
+input[type=range]::-ms-fill-lower {
+    background: #333333;
+    border-radius: 10px;
+}
+input[type=range]::-ms-fill-upper {
+    background: #f1f1f1;
+    border-radius: 10px;
+}

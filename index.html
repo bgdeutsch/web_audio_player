@@ -1,0 +1,50 @@
+<!doctype html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AudioApp</title>
+  <link rel='stylesheet' type='text/css' href='./style.css' />
+  <link rel='stylesheet' href='http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css' />
+</head>
+
+<body>
+
+	<canvas id='analyser'></canvas>
+	<div id='audio_container'>
+		<div id='track_info_box'>
+			<h3 id='track_info'></h3>
+			<div id='timebox'>
+				<span id='current_time_text'>0:00</span>
+				<input id="seekslider" type="range" min="0" max="100" value="0" step="1" />
+				<span id='duration_time_text'>0:00</span>
+			</div>
+		</div>
+
+		<ul id='my_playlist'>
+			<li song='SoMuch.mp3' class='active' rel='0'><div class='track'>Everclear - So Much For The Afterglow</div></li>
+			<li song='Solo.mp3' rel='1'><div class='track'>The Story So Far - Solo</div></li>
+			<li song='Doubt.mp3' rel='2'><div class='track'>Giants at Large - Doubt</div></li>
+			<li song='CanI.mp3' rel='3'><div class='track'>A Tribe Called Quest - Can I Kick It?</div></li>
+			<li song='Decrescendo.mp3' rel='4'><div class='track'>Rx Bandits - Decrescendo (Live)</div></li>
+			<li song='Haircuts.mp3' rel='5'><div class='track'>Lifetime - Haircuts and T-shirts</div></li>
+		</ul>
+
+		<div id='audio_controls'>
+			<div class='buttons'>
+				<div class='audio_button'><i class='ion-arrow-left-a'></i></div>
+				<div class='audio_button' id='stop'><i class='ion-stop'></i></div>
+				<div class='audio_button' id='play'><i class='ion-play'></i></div>
+				<div class='audio_button'><i class='ion-pause'></i></div>
+				<div class='audio_button'><i class='ion-arrow-right-a'></i></div>
+				<div id='volume'>
+					<i class='ion-volume-mute' style='font-size:30px';></i>
+					<i class='ion-volume-medium' style='font-size:30px;'></i>&nbsp;
+					<input id="volumeslider" type="range" min="0" max="100" value="100">
+				</div>
+			</div>
+		</div>
+
+
+	<script src='./jquery.js'></script>
+	<script src='./app.js'></script>
+</body>
+</html>
