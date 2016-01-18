@@ -1,11 +1,11 @@
 function initAudio(){
 
 	//Establish some variables for later use.
-	var audio, seekslider, volumeslider, seeking=false, seekto, 
+	var audio, seekslider, volumeslider, seeking=false, seekto,
 		current_time_text, duration_time_text, dir, playlist, playlist_index,
-		show_playlist, my_playlist;
+		track_info, my_playlist;
 
-	var play_button    = $('.ion-play'); 
+	var play_button    = $('.ion-play');
 	var pause_button   = $('.ion-pause');
 	var stop_button    = $('.ion-stop');
 	var volumeslider   = $('#volumeslider');
@@ -15,24 +15,34 @@ function initAudio(){
 	var med_volume     = $('.ion-volume-medium');
 	var playlist_track = $('#my_playlist li');
 	dir 		   	   = 'media/';
-	playlist           = ['SoMuch.mp3','Solo.mp3','Doubt.mp3','CanI.mp3', 'Decrescendo.mp3','Haircuts.mp3'];
 	playlist_index     = 0;
 	seekslider   	   = document.getElementById('seekslider');
 	current_time_text  = document.getElementById('current_time_text');
 	duration_time_text = document.getElementById('duration_time_text');
-	show_playlist  	   = document.getElementById('show_playlist');
+	track_info  	   = document.getElementById('track_info');
 	my_playlist		   = document.getElementById('my_playlist');
-	
+	playlist           = [
+		{'artist':'Everclear', 'track':'SoMuch.mp3', 'title':'So Much For The Afterglow'},
+		{'artist':'The Story So Far', 'track':'Solo.mp3', 'title':'Solo'},
+		{'artist':'Giants At Large', 'track':'Doubt.mp3', 'title':'Doubt'},
+		{'artist':'A Tribe Called Quest', 'track':'CanI.mp3', 'title':'Can I Kick It?'},
+		{'artist':'Rx Bandits', 'track':'Decrescendo.mp3', 'title':'Decrescendo (Live)'},
+		{'artist':'Lifetime', 'track':'Haircuts.mp3', 'title':'Haircuts & T-Shirts'}
+	];
+
 	//Audio object istantiation and options.
 	audio = new Audio();
-	audio.src = dir+playlist[0];
+	audio.src = dir+playlist[0].track;
 	audio.loop = false;
 	audio.play();
-	show_playlist.innerHTML = (playlist_index+1)+". "+ playlist[playlist_index];
+
+	//Fill the track information box with artist and title.
+	track_info.innerHTML = (playlist[0].artist)+' - '+(playlist[0].title);
+
 
 	//Hide play button, as the first track plays automatically on page load.
 	//Hide mute butotn, as the first track will not be muted, it will be loud!
-	$('#play').hide();	
+	$('#play').hide();
 	$(mute_button).hide();
 
 	//Event Handlers
@@ -44,25 +54,19 @@ function initAudio(){
 	$(med_volume).click(mute_audio);
 	$(mute_button).click(mute_audio);
 	$(playlist_track).click(user_change_song);
-	
 
-
-	//I have experienced some time consuming quirkiness when
-	//mixing jQuery with the web audio API.  Switching to native javaScript;
 	//to be refactored.  Event listener below executes seektimeupdate function as the song plays
 	//(as duration of song changes)
 	audio.addEventListener('timeupdate', function(){
 		seektimeupdate();
 	});
 
-	//When the song ends, execute a change song function so the next 
+	//When the song ends, execute a change song function so the next
 	//song in the playlist automatically plays.
 	audio.addEventListener('ended', function(){
 		next_song();
 	});
 
-
-	
 	//The following three event handlers/functions are described
 	//in more detail below, beginning on line 68.
 	$(seekslider).mousedown(function(e){
@@ -81,49 +85,65 @@ function initAudio(){
 	$(volumeslider).mousemove(set_volume);
 
 	/**
-		*Functions!
+	*Functions!
 	**/
 
-	// Change song in my playlist according to user interface.
+
+	// Change song in playlist according to front-end UI.
 		function user_change_song(){
+		$('#play').hide();
+		$('#stop').show();
+		//Each track in the playlist has correlating data attributes from the front-end.
+		//The song attribute loads the song file, while the rel keeps the playlist array
+		//index in line properly.
 		var track = $(this).attr('song');
-		show_playlist.innerHTML = $(this).text();
+		playlist_index = $(this).attr('rel');
+		//Display track info in the correct location, change which song is 'active', play track!
+		track_info.innerHTML = $(this).text();
+		$(playlist_track).removeClass('active');
 		$(this).addClass('active');
 		audio.src=dir+track;
 		audio.play();
 	};
-	
 
 	//Change to next song automatically in playlist when previous song has ended.
 	function next_song(){
 
 		//Check to see if the current song is the last in the playlist.
 		//If this is the case we can reset the playlist by pointing to the
-		//0 index.  If not the last song in the playlist, incremenet the
+		//0 index.  If not the last song in the playlist, increment the
 		//array index by 1.
 		if(playlist_index === (playlist.length - 1)){
+			$('#my_playlist li').first().addClass('active');
+			$('#my_playlist li').last().removeClass('active');
 			playlist_index = 0;
 		} else {
+			$('li.active').next().addClass('active');
+			$('#my_playlist li.active').first().removeClass('active');
 			playlist_index++;
 		}
 
 		//Update the current song, and play it after switching songs.
-		show_playlist.innerHTML = (playlist_index+1)+'. '+playlist[playlist_index];
-		audio.src = dir+playlist[playlist_index];
+		track_info.innerHTML = playlist[playlist_index].artist+' - '+playlist[playlist_index].title;
+		audio.src = dir+playlist[playlist_index].track;
 		audio.play();
 	}
 
-	//Change to previous song when user clicks back arrow
+	//Change to previous song when user clicks back arrow.
 	function previous_song(){
 		if (playlist_index === 0){
+			$('#my_playlist li').last().addClass('active');
+			$('#my_playlist li').first().removeClass('active');
 			playlist_index = playlist.length - 1;
 		}else{
+			$('#my_playlist li.active').prev().addClass('active');
+			$('#my_playlist li.active').last().removeClass('active');
 			playlist_index--;
 		}
 
 		//Update the current song, and play it after switching songs.
-		show_playlist.innerHTML = (playlist_index+1)+'. '+playlist[playlist_index];
-		audio.src = dir+playlist[playlist_index];
+		track_info.innerHTML = playlist[playlist_index].artist+' - '+playlist[playlist_index].title;
+		audio.src = dir+playlist[playlist_index].track;
 		audio.play();
 	}
 
@@ -134,7 +154,6 @@ function initAudio(){
 		$('#play').hide();
 		$('#stop').show();
 	}
-	
 	//Pause audio. When audio is paused, show the play button so the user can
 	//play the song when ready.
 	function pause_audio(){
@@ -169,12 +188,11 @@ function initAudio(){
 	function set_volume(){
 		audio.volume = parseFloat(this.value / 100);
 	}
-
-	//Seek function - on mousemove action on seek slider, skip to 
+	//Seek function - whe user performs mousemove action on seek slider, skip to
 	//desired time in the song.
 	//Seeking is false by default; it will be true only when a user fires a mousedown event
 	//and drags the seek slider.  The seek slider's value
-	//changes as user drags it.  e.clientX - seekslider.offsetLeft
+	//changes as user drags it. clientX - seekslider.offsetLeft
 	//gives us the exact location of the slider knob.  After
 	//figuring where we are in the track, we can set currentTime
 	//property of audio object to where the user wants to be in the song.
@@ -200,7 +218,7 @@ function initAudio(){
 		var duration_seconds = Math.floor(audio.duration - duration_minutes * 60);
 
 		//Add 0 to any single digits in the time of song
-		// for aesthetic purposes; i.e. 1:05 is standard (vs 1:5). 
+		// for aesthetic purposes; i.e. 1:05 is standard (vs 1:5).
 		if(current_seconds < 10)  { current_seconds  = '0' + current_seconds; }
 		if(current_minutes < 10)  { current_minutes  = '0' + current_minutes; }
 		if(duration_seconds < 10) { duration_seconds = '0' + duration_seconds; }
@@ -217,7 +235,7 @@ function initAudio(){
 	**/
 
 	//Establish variables for use in the analyser.
-	var canvas, ctx, source, context, analyser, fbc_array, 
+	var canvas, ctx, source, context, analyser, fbc_array,
 		bars, bar_x, bar_width, bar_height;
 
 	context  = new webkitAudioContext();
@@ -239,7 +257,7 @@ function initAudio(){
 		//
 		fbc_array = new Uint8Array(analyser.frequencyBinCount);
 		analyser.getByteFrequencyData(fbc_array);
-		//Create canvas rectangles with specific height/width/color gradient
+		//Create canvas rectangles with specific height/width/color.
 		var gradient = ctx.createLinearGradient(0,0,200,100);
 		gradient.addColorStop(0,"#68EFBB");
 		gradient.addColorStop(1,"#EF689C");
@@ -256,6 +274,6 @@ function initAudio(){
 	}
 
 } //Closes initAudio function
-		
+
 //Run initAudio function only after all page elements are loaded.
-window.addEventListener('load', initAudio, false);
+window.addEventListener('load', initAudio, false);		
