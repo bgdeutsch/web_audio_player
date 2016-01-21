@@ -107,7 +107,7 @@ function initAudio(){
 		audio.src=dir+track;
 		audio.play();
 	};
-		
+
 
 
 	//Change to next song automatically in playlist when previous song has ended.
@@ -265,11 +265,11 @@ function initAudio(){
 		analyser.getByteFrequencyData(fbc_array);
 		//Create canvas rectangles with specific height/width/color.
 		var gradient = ctx.createLinearGradient(0,0,200,100);
-		gradient.addColorStop(0,"#68EFBB");
-		gradient.addColorStop(1,"#EF689C");
+		gradient.addColorStop(0,"#3CD3AD");
+		gradient.addColorStop(1,"#4CB8C4");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.fillStyle = gradient;
-		bars = 70;
+		bars = 90;
 
 		for (var i=0; i<bars; i++){
 			bar_x = i*5;
@@ -282,4 +282,4 @@ function initAudio(){
 } //Closes initAudio function
 
 //Run initAudio function only after all page elements are loaded.
-window.addEventListener('load', initAudio, false);		
+window.addEventListener('load', initAudio, false);
