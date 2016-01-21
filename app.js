@@ -269,10 +269,10 @@ function initAudio(){
 		gradient.addColorStop(1,"#4CB8C4");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		ctx.fillStyle = gradient;
-		bars = 90;
+		bars = 350;
 
 		for (var i=0; i<bars; i++){
-			bar_x = i*5;
+			bar_x = i*4;
 			bar_width = 2;
 			bar_height = -(fbc_array[i] / 2);
 			ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
