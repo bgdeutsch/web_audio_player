@@ -14,21 +14,21 @@ function initAudio(){
 	var mute_button	   = $('.ion-volume-mute');
 	var med_volume     = $('.ion-volume-medium');
 	var playlist_track = $('#my_playlist li');
-	dir 		   	   = 'media/';
+	dir 		   	   		 = 'media/';
 	playlist_index     = 0;
-	seekslider   	   = document.getElementById('seekslider');
+	seekslider   	     = document.getElementById('seekslider');
 	current_time_text  = document.getElementById('current_time_text');
 	duration_time_text = document.getElementById('duration_time_text');
-	track_info  	   = document.getElementById('track_info');
-	my_playlist		   = document.getElementById('my_playlist');
+	track_info  	     = document.getElementById('track_info');
+	my_playlist		     = document.getElementById('my_playlist');
 	playlist           = [
-		{'artist':'Everclear', 'track':'SoMuch.mp3', 'title':'So Much For The Afterglow'},
-		{'artist':'The Story So Far', 'track':'Solo.mp3', 'title':'Solo'},
-		{'artist':'Giants At Large', 'track':'Doubt.mp3', 'title':'Doubt'},
 		{'artist':'A Tribe Called Quest', 'track':'CanI.mp3', 'title':'Can I Kick It?'},
 		{'artist':'Rx Bandits', 'track':'Decrescendo.mp3', 'title':'Decrescendo (Live)'},
-		{'artist':'Lifetime', 'track':'Haircuts.mp3', 'title':'Haircuts & T-Shirts'}
+		{'artist':'Everclear', 'track':'SoMuch.mp3', 'title':'So Much For The Afterglow'},
+		{'artist':'Lifetime', 'track':'Haircuts.mp3', 'title':'Haircuts & T-Shirts'},
+		{'artist':'The Police', 'track':'CantStand.mp3', 'title':'Cant Stand Losing You'}
 	];
+
 
 	//Audio object istantiation and options.
 	audio = new Audio();
@@ -38,7 +38,6 @@ function initAudio(){
 
 	//Fill the track information box with artist and title.
 	track_info.innerHTML = (playlist[0].artist)+' - '+(playlist[0].title);
-
 
 	//Hide play button, as the first track plays automatically on page load.
 	//Hide mute butotn, as the first track will not be muted, it will be loud!
@@ -54,7 +53,6 @@ function initAudio(){
 	$(med_volume).click(mute_audio);
 	$(mute_button).click(mute_audio);
 	$(playlist_track).click(user_change_song);
-
 
 	//to be refactored.  Event listener below executes seektimeupdate function as the song plays
 	//(as duration of song changes)
@@ -92,7 +90,7 @@ function initAudio(){
 
 
 	// Change song in playlist according to front-end UI.
-		function user_change_song(){
+	function user_change_song(){
 		$('#play').hide();
 		$('#stop').show();
 		//Each track in the playlist has correlating data attributes from the front-end.
@@ -107,8 +105,6 @@ function initAudio(){
 		audio.src=dir+track;
 		audio.play();
 	};
-
-
 
 	//Change to next song automatically in playlist when previous song has ended.
 	function next_song(){
@@ -127,11 +123,11 @@ function initAudio(){
 			playlist_index++;
 		}
 
-		//Update the current song, and play it after switching songs.
-		track_info.innerHTML = playlist[playlist_index].artist+' - '+playlist[playlist_index].title;
-		audio.src = dir+playlist[playlist_index].track;
-		audio.play();
-	}
+			//Update the current song, and play it after switching songs.
+			track_info.innerHTML = (playlist[playlist_index].artist)+' - '+playlist[playlist_index].title;
+			audio.src = dir+playlist[playlist_index].track;
+			audio.play();
+	}//End next_song()
 
 	//Change to previous song when user clicks back arrow.
 	function previous_song(){
@@ -145,10 +141,10 @@ function initAudio(){
 			playlist_index--;
 		}
 
-		//Update the current song, and play it after switching songs.
-		track_info.innerHTML = playlist[playlist_index].artist+' - '+playlist[playlist_index].title;
-		audio.src = dir+playlist[playlist_index].track;
-		audio.play();
+			//Update the current song, and play it after switching songs.
+			track_info.innerHTML = playlist[playlist_index].artist+' - '+playlist[playlist_index].title;
+			audio.src = dir+playlist[playlist_index].track;
+			audio.play();
 	}
 
 	//Play audio.  When audio is currently playing, hide the play button
@@ -167,7 +163,7 @@ function initAudio(){
 		$('#play').show();
 	}
 
-	//Stop audio, show play button.
+	//Stop audio, show play button, set current play time to 0:00.
 	function stop_audio(){
 		audio.pause();
 		$('#stop').hide();
@@ -237,49 +233,76 @@ function initAudio(){
 	}
 
 	/**
-		**Analyzer Functionality**
+	**Analyzer Functionality**
 	**/
 
-	//Establish variables for use in the analyser.
-	var canvas, ctx, source, context, analyser, fbc_array,
-		bars, bar_x, bar_width, bar_height;
-
-	context  = new webkitAudioContext();
-	analyser = context.createAnalyser();
-	canvas   = document.getElementById('analyser');
-	ctx      = canvas.getContext('2d');
-
-	source   = context.createMediaElementSource(audio);
+	//Instaniate a new Audio Context object.
+	var context = new (window.AudioContext || window.webkitAudioContext)();
+	//Create new Media Element Source and pass in the existing audio object.
+	var source  = context.createMediaElementSource(audio);
+	//Create analyser node to catch frequency data.
+	var analyser = context.createAnalyser();
+	//Bind the new analyser object to the media element.
 	source.connect(analyser);
-	analyser.connect(context.destination);
-	frameLooper();
+	//Output audio to user.  (i.e. jam music through speakers!)
+	source.connect(context.destination);
 
-	//frameLooper function animates the canvas graphics, looping
-	//at a very fast speed.
+	//Generate an array of random 8-bit integers, store it.
+	//Limiting the frequency data to 90 because using the full audio spectrum
+	//Has caused some performance issues.
+	var frequencyData = new Uint8Array(90);
 
-	function frameLooper(){
-		//Establish new Request Animation Frame Object, passing in frameLooper function.
-		window.webkitRequestAnimationFrame(frameLooper);
-		//
-		fbc_array = new Uint8Array(analyser.frequencyBinCount);
-		analyser.getByteFrequencyData(fbc_array);
-		//Create canvas rectangles with specific height/width/color.
-		var gradient = ctx.createLinearGradient(0,0,200,100);
-		gradient.addColorStop(0,"#3CD3AD");
-		gradient.addColorStop(1,"#4CB8C4");
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		ctx.fillStyle = gradient;
-		bars = 350;
+	//Set up the SVG canvas variables.
+	var height = '300';
+	var width  = '1500';
+	var barPadding = '2';
 
-		for (var i=0; i<bars; i++){
-			bar_x = i*4;
-			bar_width = 2;
-			bar_height = -(fbc_array[i] / 2);
-			ctx.fillRect(bar_x, canvas.height, bar_width, bar_height);
-		}
+	//Create the SVG by informing D3 of which DOM element to act on,
+	//and set desired attributes.
+	function createSvg(parent, height, width) {
+		return d3.select(parent).append('svg').attr('height', height).attr('width', width);
 	}
 
-} //Closes initAudio function
+	var svg = createSvg('body', height, width);
+
+	svg.selectAll('rect')
+	//Binds the array of data that was created earlier, to the SVG elements.
+	.data(frequencyData)
+	//Enter function tells D3 to go create new nodes based on the data.
+	.enter()
+	.append('rect')
+	//Using the frequencyData array index and performing some math to space out each bar evenly.
+	.attr('x', function (d, i) {
+		return i * (width / frequencyData.length);
+	})
+	.attr('width', width / frequencyData.length - barPadding)
+
+	//Creates two fill colors for the animated bars,
+	//based on whether the index is even or odd.
+	.style("fill", function(d, i) {
+		return i % 2 ? '#3cd3ad' : "#4CB8C4";
+	});
+
+	//renderBars() will continually update the animation at a very high rate.
+	function renderBars() {
+		requestAnimationFrame(renderBars);
+
+		// Copy frequency data to frequencyData array.
+		analyser.getByteFrequencyData(frequencyData);
+
+		// Updates bar chart with new data.
+		svg.selectAll('rect')
+		.data(frequencyData)
+		.attr('y', function(d) {
+			return height - d;
+		})
+		.attr('height', function(d) {
+			return d;
+		})
+	}
+
+	renderBars();
+}//Close initAudio
 
 //Run initAudio function only after all page elements are loaded.
 window.addEventListener('load', initAudio, false);
