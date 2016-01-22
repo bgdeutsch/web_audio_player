@@ -118,7 +118,7 @@ i{
     background: rgba(241, 241, 241, 1);
     border-radius: 5px;
 		overflow: hidden;
-		background-image: url('/dark_wood_@2X.png');
+		background-image: url('./dark_wood_@2X.png');
  }
 
 .track{
