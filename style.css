@@ -41,7 +41,7 @@ ul{
     width: 100%;
     height: 100px;
     color: #3CD3AD;
-    background: url('./dark_wood_@2x.png');
+    background-image: : url('./dark_wood_@2x.png');
 }
 
 #track_info_box{
@@ -118,7 +118,7 @@ i{
     background: rgba(241, 241, 241, 1);
     border-radius: 5px;
 		overflow: hidden;
-		background: url('/dark_wood_@2X.png');
+		background-image: : url('/dark_wood_@2X.png');
  }
 
 .track{
